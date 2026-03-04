@@ -1,8 +1,9 @@
 // ==UserScript==
 // @name         Pretty JSON in Kibana Discover
-// @version      0.2
+// @version      0.3
 // @description  Pretty-print JSON in Kibana Discover cell expansion popovers
 // @include      https://kibana.*.*/app/discover*
+// @include      https://elk.*.*/app/discover*
 // @run-at       document-idle
 // @grant        none
 // ==/UserScript==
