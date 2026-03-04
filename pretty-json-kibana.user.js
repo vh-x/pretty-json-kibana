@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Pretty JSON in Kibana Discover
-// @version      0.1
+// @version      0.2
 // @description  Pretty-print JSON in Kibana Discover cell expansion popovers
 // @include      https://kibana.*.*/app/discover*
 // @run-at       document-idle
@@ -78,6 +78,34 @@
   }
 
   /**
+   * Apply syntax highlighting to a pretty-printed JSON string.
+   * Escapes HTML entities first, then wraps tokens in colored spans.
+   */
+  function syntaxHighlight(json) {
+    const escaped = json
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    return escaped.replace(
+      /("(?:\\u[0-9a-fA-F]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|\b(?:true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+      (match) => {
+        let color;
+        if (/^"/.test(match)) {
+          color = /:$/.test(match) ? "#9cdcfe" : "#ce9178"; // key : string
+        } else if (/true|false/.test(match)) {
+          color = "#569cd6"; // boolean
+        } else if (match === "null") {
+          color = "#569cd6"; // null
+        } else {
+          color = "#b5cea8"; // number
+        }
+        return `<span style="color:${color}">${match}</span>`;
+      },
+    );
+  }
+
+  /**
    * Process the expansion popover: find the value span, tokenize, replace with
    * pretty-printed HTML. Leaves the table cells untouched.
    */
@@ -119,7 +147,7 @@
           "border-radius:2px",
           "padding-right:56px", // room for button
         ].join(";");
-        pre.textContent = pretty;
+        pre.innerHTML = syntaxHighlight(pretty);
 
         const btn = document.createElement("button");
         btn.textContent = "Copy";
