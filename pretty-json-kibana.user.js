@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Pretty JSON in Kibana Discover
-// @version      0.3
+// @version      0.4
 // @description  Pretty-print JSON in Kibana Discover cell expansion popovers
 // @include      https://kibana.*.*/app/discover*
 // @include      https://elk.*.*/app/discover*
@@ -143,6 +143,8 @@
           "font-family:monospace",
           "font-size:12px",
           "background:rgba(0,0,0,.3)",
+          "background:#1e1e1e",
+          "color: #d4d4d4",
           "border-left:2px solid #6aaff4",
           "padding:4px 8px 4px 8px",
           "border-radius:2px",
